@@ -1,73 +1,62 @@
-Natural Gas Consumption Forecast Model
+# Natural Gas Consumption Forecasting Model
 
-Forecasts national natural gas consumption using a smoothing-based accumulation model with least squares parameter estimation. Generates predicted values, calculates RMSE, and visualizes observed vs forecasted data.
+Forecasts natural gas consumption using a Grey Model (GM(1,1)) with exponential smoothing. Generates country-specific predictions from 9 years of historical data across 11 countries.
 
-Features
+## Features
+- Exponential smoothing accumulation for noise reduction
+- Least squares parameter estimation (Grey GM(1,1) approach)
+- RMSE evaluation against observed data
+- Interactive country selection via CLI
+- Line plot visualization of observed vs. forecasted values
 
-Smoothing-based accumulation modeling
-Least squares parameter estimation (alpha, beta)
-Consumption restoration using exponential response function
-RMSE performance evaluation
-Matplotlib visualization of observed vs predicted data
-Interactive country selection
+## Countries Included
+Brazil, Bolivia, Denmark, Netherlands, Qatar, Nigeria, Turkmenistan, Brunei, Italy, India, UAE
 
-Requirements
+All values are in billion cubic meters (bcm), covering 2008–2016.
 
+## Requirements
+```
 numpy
 matplotlib
+```
 
-Usage
+## Usage
+```
 python gas_forecast.py
-
-
+```
 The script will:
+1. Prompt you to choose a country
+2. Apply the Grey Model to historical consumption data
+3. Print observed and predicted values with RMSE
+4. Display a forecast plot
 
-Prompt user to select a country
+## Technical Details
+- **Model:** Grey GM(1,1) with exponential smoothing pre-processing
+- **Smoothing factor:** 0.59 (adjustable)
+- **Parameter estimation:** Ordinary least squares via `numpy.linalg.lstsq`
+- **Restoration:** Exponential response function using fitted α and β
+- **Evaluation:** Root Mean Squared Error (RMSE)
 
-Fit the forecasting model
+## Output
+The program displays:
+- Observed consumption values (2008–2016)
+- Model-fitted predictions over the same period
+- RMSE score
+- Plot comparing observed data (circles) vs. forecasted data (crosses)
 
-Output observed values
+## Adjustable Parameters
+Modify the smoothing factor when initializing the model:
+```python
+model = GasConsumptionModel(country_values, smoothing_factor=0.59)
+```
+- `0` → no smoothing (raw data)
+- `1` → maximum smoothing (heavy averaging)
 
-Output predicted values
+## Limitations
+- Short dataset (9 data points per country)
+- Predictions fit the training period rather than extrapolating forward
+- Assumes exponential growth/decay behavior
+- No cross-validation or hyperparameter tuning
 
-Compute RMSE
-
-Display consumption forecast plot
-
-Technical Details
-
-Model: Accumulation-based exponential forecasting
-Parameter estimation: Linear least squares (NumPy)
-Smoothing factor: Configurable (default 0.59)
-Dataset length: 9 annual observations per country
-Evaluation metric: Root Mean Squared Error (RMSE)
-Visualization: Matplotlib line plot
-
-Dataset
-
-Countries included:
-
-Brazil, Bolivia, Denmark, Netherlands, Qatar, Nigeria,
-Turkmenistan, Brunei, Italy, India, UAE
-
-Units: Billion cubic meters (bcm)
-
-Time range: Starting from 2008 (9 consecutive years)
-
-Model Workflow
-
-Accumulate raw time-series data using smoothing
-
-Estimate parameters (alpha, beta) via regression
-
-Restore predicted values
-
-Evaluate accuracy with RMSE
-
-Plot results
-
-Output
-
-Console: Observed data, predicted data, RMSE
-
-Graph: Observed vs forecasted consumption
+## License
+MIT
